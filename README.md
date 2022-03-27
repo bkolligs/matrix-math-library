@@ -1,6 +1,5 @@
 # Matrix Math Library
-An academic project for myself to understand how SIMD instructions work, and benchmarking against libraries like Eigen, and GLM
-
+An academic project for myself to understand how [SIMD](https://en.wikipedia.org/wiki/Single_instruction,_multiple_data) instructions work, and benchmarking my implementation against libraries like Eigen, and GLM.
 
 ## Dependencies
 1. Eigen Math Library [ [source](https://gitlab.com/libeigen/eigen)]
