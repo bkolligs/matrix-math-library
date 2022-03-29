@@ -1,4 +1,5 @@
-#include "matrix.h"
+#pragma once
+#include "core.h"
 
 namespace mm
 {
