@@ -18,357 +18,327 @@ float operator*(const Vector3& one, const Vector3& two) {
    0:	f3 0f 1e fa          	endbr64 
 #ifdef VECTOR_SIMD
     return simd::__vectorSIMDDot(one, two);
+   4:	e9 00 00 00 00       	jmpq   9 <_ZN2mmmlERKNS_7Vector3ES2_+0x9>
+   9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+
+0000000000000010 <_ZN2mm4normERKNS_7Vector3E>:
 #else
     return one.x * two.x + one.y * two.y + one.z * two.z;
-   4:	c5 fb 10 07          	vmovsd (%rdi),%xmm0
-   8:	c5 fb 10 4f 08       	vmovsd 0x8(%rdi),%xmm1
-   d:	c5 fb 59 06          	vmulsd (%rsi),%xmm0,%xmm0
-  11:	c5 f3 59 4e 08       	vmulsd 0x8(%rsi),%xmm1,%xmm1
-  16:	c5 fb 58 c1          	vaddsd %xmm1,%xmm0,%xmm0
-  1a:	c5 fb 10 4f 10       	vmovsd 0x10(%rdi),%xmm1
-  1f:	c5 f3 59 4e 10       	vmulsd 0x10(%rsi),%xmm1,%xmm1
-  24:	c5 fb 58 c1          	vaddsd %xmm1,%xmm0,%xmm0
-  28:	c5 fb 5a c0          	vcvtsd2ss %xmm0,%xmm0,%xmm0
 #endif
 }
-  2c:	c3                   	retq   
-  2d:	0f 1f 00             	nopl   (%rax)
-
-0000000000000030 <_ZN2mm4normERKNS_7Vector3E>:
 
 float norm(const Vector3& vector) { return sqrt(vector * vector); }
-  30:	f3 0f 1e fa          	endbr64 
-    return one.x * two.x + one.y * two.y + one.z * two.z;
-  34:	c5 fb 10 0f          	vmovsd (%rdi),%xmm1
-  38:	c5 fb 10 47 08       	vmovsd 0x8(%rdi),%xmm0
-  3d:	c5 fb 10 57 10       	vmovsd 0x10(%rdi),%xmm2
-  42:	c5 f3 59 c9          	vmulsd %xmm1,%xmm1,%xmm1
-  46:	c5 fb 59 c0          	vmulsd %xmm0,%xmm0,%xmm0
-  4a:	c5 eb 59 d2          	vmulsd %xmm2,%xmm2,%xmm2
-  4e:	c5 f3 58 c0          	vaddsd %xmm0,%xmm1,%xmm0
-  52:	c5 fb 58 c2          	vaddsd %xmm2,%xmm0,%xmm0
-  56:	c5 e8 57 d2          	vxorps %xmm2,%xmm2,%xmm2
-  5a:	c5 fb 5a c0          	vcvtsd2ss %xmm0,%xmm0,%xmm0
+  10:	f3 0f 1e fa          	endbr64 
+  14:	48 83 ec 18          	sub    $0x18,%rsp
+    return simd::__vectorSIMDDot(one, two);
+  18:	48 89 fe             	mov    %rdi,%rsi
+  1b:	e8 00 00 00 00       	callq  20 <_ZN2mm4normERKNS_7Vector3E+0x10>
   using ::sqrt;
 
 #ifndef __CORRECT_ISO_CPP_MATH_H_PROTO
   inline _GLIBCXX_CONSTEXPR float
   sqrt(float __x)
   { return __builtin_sqrtf(__x); }
-  5e:	c5 f8 2e d0          	vucomiss %xmm0,%xmm2
-  62:	c5 fa 51 c8          	vsqrtss %xmm0,%xmm0,%xmm1
-  66:	77 05                	ja     6d <_ZN2mm4normERKNS_7Vector3E+0x3d>
+  20:	c5 e8 57 d2          	vxorps %xmm2,%xmm2,%xmm2
+  24:	c5 f8 2e d0          	vucomiss %xmm0,%xmm2
+  28:	c5 fa 51 c8          	vsqrtss %xmm0,%xmm0,%xmm1
+  2c:	77 09                	ja     37 <_ZN2mm4normERKNS_7Vector3E+0x27>
 float norm(const Vector3& vector) { return sqrt(vector * vector); }
-  68:	c5 f8 28 c1          	vmovaps %xmm1,%xmm0
-  6c:	c3                   	retq   
-  6d:	48 83 ec 18          	sub    $0x18,%rsp
-  71:	c5 fa 11 4c 24 0c    	vmovss %xmm1,0xc(%rsp)
-  77:	e8 00 00 00 00       	callq  7c <_ZN2mm4normERKNS_7Vector3E+0x4c>
-  7c:	c5 fa 10 4c 24 0c    	vmovss 0xc(%rsp),%xmm1
-  82:	48 83 c4 18          	add    $0x18,%rsp
-  86:	c5 f8 28 c1          	vmovaps %xmm1,%xmm0
-  8a:	c3                   	retq   
-  8b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+  2e:	c5 f8 28 c1          	vmovaps %xmm1,%xmm0
+  32:	48 83 c4 18          	add    $0x18,%rsp
+  36:	c3                   	retq   
+  37:	c5 fa 11 4c 24 0c    	vmovss %xmm1,0xc(%rsp)
+  3d:	e8 00 00 00 00       	callq  42 <_ZN2mm4normERKNS_7Vector3E+0x32>
+  42:	c5 fa 10 4c 24 0c    	vmovss 0xc(%rsp),%xmm1
+  48:	eb e4                	jmp    2e <_ZN2mm4normERKNS_7Vector3E+0x1e>
+  4a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
 
-0000000000000090 <_ZN2mm5crossERKNS_7Vector3ES2_>:
+0000000000000050 <_ZN2mm5crossERKNS_7Vector3ES2_>:
 
 Vector3 cross(const Vector3& one, const Vector3& two) {
-  90:	f3 0f 1e fa          	endbr64 
+  50:	f3 0f 1e fa          	endbr64 
+  54:	41 54                	push   %r12
+  56:	49 89 fc             	mov    %rdi,%r12
+  59:	48 83 ec 10          	sub    $0x10,%rsp
+  5d:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+  64:	00 00 
+  66:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+  6b:	31 c0                	xor    %eax,%eax
 #ifdef VECTOR_SIMD
     return simd::__vectorSIMDCross(one, two);
-#else
-    return Vector3{
+  6d:	e8 00 00 00 00       	callq  72 <_ZN2mm5crossERKNS_7Vector3ES2_+0x22>
         one.y * two.z - one.z * two.y,
-  94:	c5 fb 10 56 08       	vmovsd 0x8(%rsi),%xmm2
-  99:	c5 fb 10 5a 10       	vmovsd 0x10(%rdx),%xmm3
-Vector3 cross(const Vector3& one, const Vector3& two) {
-  9e:	48 89 f8             	mov    %rdi,%rax
-        one.y * two.z - one.z * two.y,
-  a1:	c5 fb 10 4e 10       	vmovsd 0x10(%rsi),%xmm1
-  a6:	c5 fb 10 42 08       	vmovsd 0x8(%rdx),%xmm0
-  ab:	c5 eb 59 e3          	vmulsd %xmm3,%xmm2,%xmm4
-  af:	c5 f3 59 e8          	vmulsd %xmm0,%xmm1,%xmm5
-  b3:	c5 db 5c e5          	vsubsd %xmm5,%xmm4,%xmm4
         one.z * two.x - one.x * two.z,
-  b7:	c5 fb 10 2e          	vmovsd (%rsi),%xmm5
-  bb:	c5 e3 59 dd          	vmulsd %xmm5,%xmm3,%xmm3
         one.x * two.y - one.y * two.x,
     };
-  bf:	c5 fb 11 27          	vmovsd %xmm4,(%rdi)
-        one.z * two.x - one.x * two.z,
-  c3:	c5 fb 10 22          	vmovsd (%rdx),%xmm4
-        one.x * two.y - one.y * two.x,
-  c7:	c5 fb 59 c5          	vmulsd %xmm5,%xmm0,%xmm0
-        one.z * two.x - one.x * two.z,
-  cb:	c5 f3 59 cc          	vmulsd %xmm4,%xmm1,%xmm1
-        one.x * two.y - one.y * two.x,
-  cf:	c5 eb 59 d4          	vmulsd %xmm4,%xmm2,%xmm2
-        one.z * two.x - one.x * two.z,
-  d3:	c5 f3 5c cb          	vsubsd %xmm3,%xmm1,%xmm1
-        one.x * two.y - one.y * two.x,
-  d7:	c5 fb 5c c2          	vsubsd %xmm2,%xmm0,%xmm0
-    };
-  db:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
-  e0:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
 #endif
 }
-  e5:	c3                   	retq   
-  e6:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
-  ed:	00 00 00 
+  72:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+  77:	64 48 33 04 25 28 00 	xor    %fs:0x28,%rax
+  7e:	00 00 
+  80:	75 0a                	jne    8c <_ZN2mm5crossERKNS_7Vector3ES2_+0x3c>
+  82:	48 83 c4 10          	add    $0x10,%rsp
+  86:	4c 89 e0             	mov    %r12,%rax
+  89:	41 5c                	pop    %r12
+  8b:	c3                   	retq   
+  8c:	e8 00 00 00 00       	callq  91 <_ZN2mm5crossERKNS_7Vector3ES2_+0x41>
+  91:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+  98:	00 00 00 00 
+  9c:	0f 1f 40 00          	nopl   0x0(%rax)
 
-00000000000000f0 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd>:
+00000000000000a0 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd>:
 
 bool isApprox(const Vector3& one, const Vector3& two, double atol,
               double rtol) {
-  f0:	f3 0f 1e fa          	endbr64 
-  f4:	55                   	push   %rbp
-  f5:	c5 f9 28 d0          	vmovapd %xmm0,%xmm2
-  f9:	c5 f9 28 d9          	vmovapd %xmm1,%xmm3
-  fd:	48 89 fd             	mov    %rdi,%rbp
- 100:	53                   	push   %rbx
- 101:	48 89 f3             	mov    %rsi,%rbx
- 104:	48 83 ec 18          	sub    $0x18,%rsp
+  a0:	f3 0f 1e fa          	endbr64 
+  a4:	55                   	push   %rbp
+  a5:	c5 f9 28 d0          	vmovapd %xmm0,%xmm2
+  a9:	c5 f9 28 d9          	vmovapd %xmm1,%xmm3
+  ad:	48 89 fd             	mov    %rdi,%rbp
+  b0:	53                   	push   %rbx
+  b1:	48 89 f3             	mov    %rsi,%rbx
+  b4:	48 83 ec 18          	sub    $0x18,%rsp
     return utils::isApprox(one.x, two.x, atol, rtol) and
- 108:	c5 fb 11 4c 24 08    	vmovsd %xmm1,0x8(%rsp)
- 10e:	c5 fb 10 0e          	vmovsd (%rsi),%xmm1
- 112:	c5 fb 11 04 24       	vmovsd %xmm0,(%rsp)
- 117:	c5 fb 10 07          	vmovsd (%rdi),%xmm0
- 11b:	e8 00 00 00 00       	callq  120 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x30>
+  b8:	c5 fb 11 4c 24 08    	vmovsd %xmm1,0x8(%rsp)
+  be:	c5 fb 10 0e          	vmovsd (%rsi),%xmm1
+  c2:	c5 fb 11 04 24       	vmovsd %xmm0,(%rsp)
+  c7:	c5 fb 10 07          	vmovsd (%rdi),%xmm0
+  cb:	e8 00 00 00 00       	callq  d0 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x30>
            utils::isApprox(one.y, two.y, atol, rtol) and
- 120:	c5 fb 10 14 24       	vmovsd (%rsp),%xmm2
- 125:	c5 fb 10 5c 24 08    	vmovsd 0x8(%rsp),%xmm3
- 12b:	84 c0                	test   %al,%al
- 12d:	75 11                	jne    140 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x50>
+  d0:	c5 fb 10 14 24       	vmovsd (%rsp),%xmm2
+  d5:	c5 fb 10 5c 24 08    	vmovsd 0x8(%rsp),%xmm3
+  db:	84 c0                	test   %al,%al
+  dd:	75 11                	jne    f0 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x50>
            utils::isApprox(one.z, two.z, atol, rtol);
 }
- 12f:	48 83 c4 18          	add    $0x18,%rsp
- 133:	31 c0                	xor    %eax,%eax
- 135:	5b                   	pop    %rbx
- 136:	5d                   	pop    %rbp
- 137:	c3                   	retq   
- 138:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
- 13f:	00 
+  df:	48 83 c4 18          	add    $0x18,%rsp
+  e3:	31 c0                	xor    %eax,%eax
+  e5:	5b                   	pop    %rbx
+  e6:	5d                   	pop    %rbp
+  e7:	c3                   	retq   
+  e8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+  ef:	00 
            utils::isApprox(one.y, two.y, atol, rtol) and
- 140:	c5 fb 10 45 08       	vmovsd 0x8(%rbp),%xmm0
- 145:	c5 fb 10 4b 08       	vmovsd 0x8(%rbx),%xmm1
- 14a:	e8 00 00 00 00       	callq  14f <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x5f>
+  f0:	c5 fb 10 45 08       	vmovsd 0x8(%rbp),%xmm0
+  f5:	c5 fb 10 4b 08       	vmovsd 0x8(%rbx),%xmm1
+  fa:	e8 00 00 00 00       	callq  ff <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x5f>
     return utils::isApprox(one.x, two.x, atol, rtol) and
- 14f:	c5 fb 10 14 24       	vmovsd (%rsp),%xmm2
- 154:	c5 fb 10 5c 24 08    	vmovsd 0x8(%rsp),%xmm3
- 15a:	84 c0                	test   %al,%al
- 15c:	74 d1                	je     12f <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x3f>
+  ff:	c5 fb 10 14 24       	vmovsd (%rsp),%xmm2
+ 104:	c5 fb 10 5c 24 08    	vmovsd 0x8(%rsp),%xmm3
+ 10a:	84 c0                	test   %al,%al
+ 10c:	74 d1                	je     df <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x3f>
            utils::isApprox(one.z, two.z, atol, rtol);
- 15e:	c5 fb 10 45 10       	vmovsd 0x10(%rbp),%xmm0
- 163:	c5 fb 10 4b 10       	vmovsd 0x10(%rbx),%xmm1
+ 10e:	c5 fb 10 45 10       	vmovsd 0x10(%rbp),%xmm0
+ 113:	c5 fb 10 4b 10       	vmovsd 0x10(%rbx),%xmm1
 }
- 168:	48 83 c4 18          	add    $0x18,%rsp
- 16c:	5b                   	pop    %rbx
- 16d:	5d                   	pop    %rbp
+ 118:	48 83 c4 18          	add    $0x18,%rsp
+ 11c:	5b                   	pop    %rbx
+ 11d:	5d                   	pop    %rbp
            utils::isApprox(one.z, two.z, atol, rtol);
- 16e:	e9 00 00 00 00       	jmpq   173 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x83>
- 173:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
- 17a:	00 00 00 00 
- 17e:	66 90                	xchg   %ax,%ax
+ 11e:	e9 00 00 00 00       	jmpq   123 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x83>
+ 123:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+ 12a:	00 00 00 00 
+ 12e:	66 90                	xchg   %ax,%ax
 
-0000000000000180 <_ZN2mmplERKNS_7Vector3ES2_>:
+0000000000000130 <_ZN2mmplERKNS_7Vector3ES2_>:
 
 Vector3 operator+(const Vector3& one, const Vector3& two) {
- 180:	f3 0f 1e fa          	endbr64 
+ 130:	f3 0f 1e fa          	endbr64 
     return Vector3{one.x + two.x, one.y + two.y, one.z + two.z};
- 184:	c5 fb 10 06          	vmovsd (%rsi),%xmm0
- 188:	c5 fb 58 02          	vaddsd (%rdx),%xmm0,%xmm0
+ 134:	c5 fb 10 06          	vmovsd (%rsi),%xmm0
+ 138:	c5 fb 58 02          	vaddsd (%rdx),%xmm0,%xmm0
 Vector3 operator+(const Vector3& one, const Vector3& two) {
- 18c:	48 89 f8             	mov    %rdi,%rax
+ 13c:	48 89 f8             	mov    %rdi,%rax
     return Vector3{one.x + two.x, one.y + two.y, one.z + two.z};
- 18f:	c5 fb 11 07          	vmovsd %xmm0,(%rdi)
- 193:	c5 fb 10 46 08       	vmovsd 0x8(%rsi),%xmm0
- 198:	c5 fb 58 42 08       	vaddsd 0x8(%rdx),%xmm0,%xmm0
- 19d:	c5 fb 11 47 08       	vmovsd %xmm0,0x8(%rdi)
- 1a2:	c5 fb 10 46 10       	vmovsd 0x10(%rsi),%xmm0
- 1a7:	c5 fb 58 42 10       	vaddsd 0x10(%rdx),%xmm0,%xmm0
- 1ac:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
+ 13f:	c5 fb 11 07          	vmovsd %xmm0,(%rdi)
+ 143:	c5 fb 10 46 08       	vmovsd 0x8(%rsi),%xmm0
+ 148:	c5 fb 58 42 08       	vaddsd 0x8(%rdx),%xmm0,%xmm0
+ 14d:	c5 fb 11 47 08       	vmovsd %xmm0,0x8(%rdi)
+ 152:	c5 fb 10 46 10       	vmovsd 0x10(%rsi),%xmm0
+ 157:	c5 fb 58 42 10       	vaddsd 0x10(%rdx),%xmm0,%xmm0
+ 15c:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
 }
- 1b1:	c3                   	retq   
- 1b2:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
- 1b9:	00 00 00 00 
- 1bd:	0f 1f 00             	nopl   (%rax)
+ 161:	c3                   	retq   
+ 162:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+ 169:	00 00 00 00 
+ 16d:	0f 1f 00             	nopl   (%rax)
 
-00000000000001c0 <_ZN2mmmiERKNS_7Vector3ES2_>:
+0000000000000170 <_ZN2mmmiERKNS_7Vector3ES2_>:
 
 Vector3 operator-(const Vector3& one, const Vector3& two) {
- 1c0:	f3 0f 1e fa          	endbr64 
+ 170:	f3 0f 1e fa          	endbr64 
     return Vector3{one.x - two.x, one.y - two.y, one.z - two.z};
- 1c4:	c5 fb 10 06          	vmovsd (%rsi),%xmm0
- 1c8:	c5 fb 5c 02          	vsubsd (%rdx),%xmm0,%xmm0
+ 174:	c5 fb 10 06          	vmovsd (%rsi),%xmm0
+ 178:	c5 fb 5c 02          	vsubsd (%rdx),%xmm0,%xmm0
 Vector3 operator-(const Vector3& one, const Vector3& two) {
- 1cc:	48 89 f8             	mov    %rdi,%rax
+ 17c:	48 89 f8             	mov    %rdi,%rax
     return Vector3{one.x - two.x, one.y - two.y, one.z - two.z};
- 1cf:	c5 fb 11 07          	vmovsd %xmm0,(%rdi)
- 1d3:	c5 fb 10 46 08       	vmovsd 0x8(%rsi),%xmm0
- 1d8:	c5 fb 5c 42 08       	vsubsd 0x8(%rdx),%xmm0,%xmm0
- 1dd:	c5 fb 11 47 08       	vmovsd %xmm0,0x8(%rdi)
- 1e2:	c5 fb 10 46 10       	vmovsd 0x10(%rsi),%xmm0
- 1e7:	c5 fb 5c 42 10       	vsubsd 0x10(%rdx),%xmm0,%xmm0
- 1ec:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
+ 17f:	c5 fb 11 07          	vmovsd %xmm0,(%rdi)
+ 183:	c5 fb 10 46 08       	vmovsd 0x8(%rsi),%xmm0
+ 188:	c5 fb 5c 42 08       	vsubsd 0x8(%rdx),%xmm0,%xmm0
+ 18d:	c5 fb 11 47 08       	vmovsd %xmm0,0x8(%rdi)
+ 192:	c5 fb 10 46 10       	vmovsd 0x10(%rsi),%xmm0
+ 197:	c5 fb 5c 42 10       	vsubsd 0x10(%rdx),%xmm0,%xmm0
+ 19c:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
 }
- 1f1:	c3                   	retq   
- 1f2:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
- 1f9:	00 00 00 00 
- 1fd:	0f 1f 00             	nopl   (%rax)
+ 1a1:	c3                   	retq   
+ 1a2:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+ 1a9:	00 00 00 00 
+ 1ad:	0f 1f 00             	nopl   (%rax)
 
-0000000000000200 <_ZN2mmeqERKNS_7Vector3ES2_>:
+00000000000001b0 <_ZN2mmeqERKNS_7Vector3ES2_>:
 
 bool operator==(const Vector3& one, const Vector3& two) {
- 200:	f3 0f 1e fa          	endbr64 
+ 1b0:	f3 0f 1e fa          	endbr64 
     return isApprox(one, two);
- 204:	c5 fb 10 0d 00 00 00 	vmovsd 0x0(%rip),%xmm1        # 20c <_ZN2mmeqERKNS_7Vector3ES2_+0xc>
- 20b:	00 
- 20c:	c5 f9 57 c0          	vxorpd %xmm0,%xmm0,%xmm0
- 210:	e9 db fe ff ff       	jmpq   f0 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd>
- 215:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
- 21c:	00 00 00 00 
+ 1b4:	c5 fb 10 0d 00 00 00 	vmovsd 0x0(%rip),%xmm1        # 1bc <_ZN2mmeqERKNS_7Vector3ES2_+0xc>
+ 1bb:	00 
+ 1bc:	c5 f9 57 c0          	vxorpd %xmm0,%xmm0,%xmm0
+ 1c0:	e9 db fe ff ff       	jmpq   a0 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd>
+ 1c5:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+ 1cc:	00 00 00 00 
 
-0000000000000220 <_ZN2mmmlEfRKNS_7Vector3E>:
+00000000000001d0 <_ZN2mmmlEfRKNS_7Vector3E>:
 }
 
 Vector3 operator*(const float scalar, const Vector3& vector) {
- 220:	f3 0f 1e fa          	endbr64 
+ 1d0:	f3 0f 1e fa          	endbr64 
     return Vector3{scalar * vector.x, scalar * vector.y, scalar * vector.z};
- 224:	c5 fa 5a c0          	vcvtss2sd %xmm0,%xmm0,%xmm0
- 228:	c5 fb 59 0e          	vmulsd (%rsi),%xmm0,%xmm1
+ 1d4:	c5 fa 5a c0          	vcvtss2sd %xmm0,%xmm0,%xmm0
+ 1d8:	c5 fb 59 0e          	vmulsd (%rsi),%xmm0,%xmm1
 Vector3 operator*(const float scalar, const Vector3& vector) {
- 22c:	48 89 f8             	mov    %rdi,%rax
+ 1dc:	48 89 f8             	mov    %rdi,%rax
     return Vector3{scalar * vector.x, scalar * vector.y, scalar * vector.z};
- 22f:	c5 fb 11 0f          	vmovsd %xmm1,(%rdi)
- 233:	c5 fb 59 4e 08       	vmulsd 0x8(%rsi),%xmm0,%xmm1
- 238:	c5 fb 59 46 10       	vmulsd 0x10(%rsi),%xmm0,%xmm0
- 23d:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
- 242:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
+ 1df:	c5 fb 11 0f          	vmovsd %xmm1,(%rdi)
+ 1e3:	c5 fb 59 4e 08       	vmulsd 0x8(%rsi),%xmm0,%xmm1
+ 1e8:	c5 fb 59 46 10       	vmulsd 0x10(%rsi),%xmm0,%xmm0
+ 1ed:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
+ 1f2:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
 }
- 247:	c3                   	retq   
- 248:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
- 24f:	00 
+ 1f7:	c3                   	retq   
+ 1f8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 1ff:	00 
 
-0000000000000250 <_ZN2mmdvEfRKNS_7Vector3E>:
+0000000000000200 <_ZN2mmdvEfRKNS_7Vector3E>:
 
 Vector3 operator/(const float scalar, const Vector3& vector) {
- 250:	f3 0f 1e fa          	endbr64 
+ 200:	f3 0f 1e fa          	endbr64 
     return Vector3{scalar / vector.x, scalar / vector.y, scalar / vector.z};
- 254:	c5 fa 5a c0          	vcvtss2sd %xmm0,%xmm0,%xmm0
+ 204:	c5 fa 5a c0          	vcvtss2sd %xmm0,%xmm0,%xmm0
 Vector3 operator/(const float scalar, const Vector3& vector) {
- 258:	48 89 f8             	mov    %rdi,%rax
+ 208:	48 89 f8             	mov    %rdi,%rax
     return Vector3{scalar / vector.x, scalar / vector.y, scalar / vector.z};
- 25b:	c5 fb 5e 0e          	vdivsd (%rsi),%xmm0,%xmm1
- 25f:	c5 fb 11 0f          	vmovsd %xmm1,(%rdi)
- 263:	c5 fb 5e 4e 08       	vdivsd 0x8(%rsi),%xmm0,%xmm1
- 268:	c5 fb 5e 46 10       	vdivsd 0x10(%rsi),%xmm0,%xmm0
- 26d:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
- 272:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
+ 20b:	c5 fb 5e 0e          	vdivsd (%rsi),%xmm0,%xmm1
+ 20f:	c5 fb 11 0f          	vmovsd %xmm1,(%rdi)
+ 213:	c5 fb 5e 4e 08       	vdivsd 0x8(%rsi),%xmm0,%xmm1
+ 218:	c5 fb 5e 46 10       	vdivsd 0x10(%rsi),%xmm0,%xmm0
+ 21d:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
+ 222:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
 }
- 277:	c3                   	retq   
- 278:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
- 27f:	00 
+ 227:	c3                   	retq   
+ 228:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 22f:	00 
 
-0000000000000280 <_ZN2mmplEfRKNS_7Vector3E>:
+0000000000000230 <_ZN2mmplEfRKNS_7Vector3E>:
 
 Vector3 operator+(const float scalar, const Vector3& vector) {
- 280:	f3 0f 1e fa          	endbr64 
+ 230:	f3 0f 1e fa          	endbr64 
     return Vector3{scalar + vector.x, scalar + vector.y, scalar + vector.z};
- 284:	c5 fa 5a c0          	vcvtss2sd %xmm0,%xmm0,%xmm0
- 288:	c5 fb 58 0e          	vaddsd (%rsi),%xmm0,%xmm1
+ 234:	c5 fa 5a c0          	vcvtss2sd %xmm0,%xmm0,%xmm0
+ 238:	c5 fb 58 0e          	vaddsd (%rsi),%xmm0,%xmm1
 Vector3 operator+(const float scalar, const Vector3& vector) {
- 28c:	48 89 f8             	mov    %rdi,%rax
+ 23c:	48 89 f8             	mov    %rdi,%rax
     return Vector3{scalar + vector.x, scalar + vector.y, scalar + vector.z};
- 28f:	c5 fb 11 0f          	vmovsd %xmm1,(%rdi)
- 293:	c5 fb 58 4e 08       	vaddsd 0x8(%rsi),%xmm0,%xmm1
- 298:	c5 fb 58 46 10       	vaddsd 0x10(%rsi),%xmm0,%xmm0
- 29d:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
- 2a2:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
+ 23f:	c5 fb 11 0f          	vmovsd %xmm1,(%rdi)
+ 243:	c5 fb 58 4e 08       	vaddsd 0x8(%rsi),%xmm0,%xmm1
+ 248:	c5 fb 58 46 10       	vaddsd 0x10(%rsi),%xmm0,%xmm0
+ 24d:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
+ 252:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
 }
- 2a7:	c3                   	retq   
- 2a8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
- 2af:	00 
+ 257:	c3                   	retq   
+ 258:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 25f:	00 
 
-00000000000002b0 <_ZN2mmmiEfRKNS_7Vector3E>:
+0000000000000260 <_ZN2mmmiEfRKNS_7Vector3E>:
 
 Vector3 operator-(const float scalar, const Vector3& vector) {
- 2b0:	f3 0f 1e fa          	endbr64 
+ 260:	f3 0f 1e fa          	endbr64 
     return Vector3{scalar - vector.x, scalar - vector.y, scalar - vector.z};
- 2b4:	c5 fa 5a c0          	vcvtss2sd %xmm0,%xmm0,%xmm0
- 2b8:	c5 fb 5c 0e          	vsubsd (%rsi),%xmm0,%xmm1
+ 264:	c5 fa 5a c0          	vcvtss2sd %xmm0,%xmm0,%xmm0
+ 268:	c5 fb 5c 0e          	vsubsd (%rsi),%xmm0,%xmm1
 Vector3 operator-(const float scalar, const Vector3& vector) {
- 2bc:	48 89 f8             	mov    %rdi,%rax
+ 26c:	48 89 f8             	mov    %rdi,%rax
     return Vector3{scalar - vector.x, scalar - vector.y, scalar - vector.z};
- 2bf:	c5 fb 11 0f          	vmovsd %xmm1,(%rdi)
- 2c3:	c5 fb 5c 4e 08       	vsubsd 0x8(%rsi),%xmm0,%xmm1
- 2c8:	c5 fb 5c 46 10       	vsubsd 0x10(%rsi),%xmm0,%xmm0
- 2cd:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
- 2d2:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
+ 26f:	c5 fb 11 0f          	vmovsd %xmm1,(%rdi)
+ 273:	c5 fb 5c 4e 08       	vsubsd 0x8(%rsi),%xmm0,%xmm1
+ 278:	c5 fb 5c 46 10       	vsubsd 0x10(%rsi),%xmm0,%xmm0
+ 27d:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
+ 282:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
 }
- 2d7:	c3                   	retq   
- 2d8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
- 2df:	00 
+ 287:	c3                   	retq   
+ 288:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 28f:	00 
 
-00000000000002e0 <_ZN2mmlsERSoRKNS_7Vector3E>:
+0000000000000290 <_ZN2mmlsERSoRKNS_7Vector3E>:
 std::ostream& operator<<(std::ostream& os, const Vector3& vector) {
- 2e0:	f3 0f 1e fa          	endbr64 
- 2e4:	41 54                	push   %r12
+ 290:	f3 0f 1e fa          	endbr64 
+ 294:	41 54                	push   %r12
     operator<<(basic_ostream<char, _Traits>& __out, const char* __s)
     {
       if (!__s)
 	__out.setstate(ios_base::badbit);
       else
 	__ostream_insert(__out, __s,
- 2e6:	ba 01 00 00 00       	mov    $0x1,%edx
- 2eb:	49 89 fc             	mov    %rdi,%r12
- 2ee:	55                   	push   %rbp
- 2ef:	53                   	push   %rbx
- 2f0:	48 89 f3             	mov    %rsi,%rbx
- 2f3:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 2fa <_ZN2mmlsERSoRKNS_7Vector3E+0x1a>
- 2fa:	e8 00 00 00 00       	callq  2ff <_ZN2mmlsERSoRKNS_7Vector3E+0x1f>
+ 296:	ba 01 00 00 00       	mov    $0x1,%edx
+ 29b:	49 89 fc             	mov    %rdi,%r12
+ 29e:	55                   	push   %rbp
+ 29f:	53                   	push   %rbx
+ 2a0:	48 89 f3             	mov    %rsi,%rbx
+ 2a3:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 2aa <_ZN2mmlsERSoRKNS_7Vector3E+0x1a>
+ 2aa:	e8 00 00 00 00       	callq  2af <_ZN2mmlsERSoRKNS_7Vector3E+0x1f>
       { return _M_insert(__f); }
- 2ff:	c5 fb 10 03          	vmovsd (%rbx),%xmm0
- 303:	4c 89 e7             	mov    %r12,%rdi
- 306:	e8 00 00 00 00       	callq  30b <_ZN2mmlsERSoRKNS_7Vector3E+0x2b>
+ 2af:	c5 fb 10 03          	vmovsd (%rbx),%xmm0
+ 2b3:	4c 89 e7             	mov    %r12,%rdi
+ 2b6:	e8 00 00 00 00       	callq  2bb <_ZN2mmlsERSoRKNS_7Vector3E+0x2b>
 	__ostream_insert(__out, __s,
- 30b:	ba 02 00 00 00       	mov    $0x2,%edx
- 310:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 317 <_ZN2mmlsERSoRKNS_7Vector3E+0x37>
- 317:	48 89 c7             	mov    %rax,%rdi
+ 2bb:	ba 02 00 00 00       	mov    $0x2,%edx
+ 2c0:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 2c7 <_ZN2mmlsERSoRKNS_7Vector3E+0x37>
+ 2c7:	48 89 c7             	mov    %rax,%rdi
       { return _M_insert(__f); }
- 31a:	48 89 c5             	mov    %rax,%rbp
+ 2ca:	48 89 c5             	mov    %rax,%rbp
 	__ostream_insert(__out, __s,
- 31d:	e8 00 00 00 00       	callq  322 <_ZN2mmlsERSoRKNS_7Vector3E+0x42>
+ 2cd:	e8 00 00 00 00       	callq  2d2 <_ZN2mmlsERSoRKNS_7Vector3E+0x42>
       { return _M_insert(__f); }
- 322:	c5 fb 10 43 08       	vmovsd 0x8(%rbx),%xmm0
- 327:	48 89 ef             	mov    %rbp,%rdi
- 32a:	e8 00 00 00 00       	callq  32f <_ZN2mmlsERSoRKNS_7Vector3E+0x4f>
+ 2d2:	c5 fb 10 43 08       	vmovsd 0x8(%rbx),%xmm0
+ 2d7:	48 89 ef             	mov    %rbp,%rdi
+ 2da:	e8 00 00 00 00       	callq  2df <_ZN2mmlsERSoRKNS_7Vector3E+0x4f>
 	__ostream_insert(__out, __s,
- 32f:	ba 02 00 00 00       	mov    $0x2,%edx
- 334:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 33b <_ZN2mmlsERSoRKNS_7Vector3E+0x5b>
- 33b:	48 89 c7             	mov    %rax,%rdi
+ 2df:	ba 02 00 00 00       	mov    $0x2,%edx
+ 2e4:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 2eb <_ZN2mmlsERSoRKNS_7Vector3E+0x5b>
+ 2eb:	48 89 c7             	mov    %rax,%rdi
       { return _M_insert(__f); }
- 33e:	48 89 c5             	mov    %rax,%rbp
+ 2ee:	48 89 c5             	mov    %rax,%rbp
 	__ostream_insert(__out, __s,
- 341:	e8 00 00 00 00       	callq  346 <_ZN2mmlsERSoRKNS_7Vector3E+0x66>
+ 2f1:	e8 00 00 00 00       	callq  2f6 <_ZN2mmlsERSoRKNS_7Vector3E+0x66>
       { return _M_insert(__f); }
- 346:	c5 fb 10 43 10       	vmovsd 0x10(%rbx),%xmm0
- 34b:	48 89 ef             	mov    %rbp,%rdi
- 34e:	e8 00 00 00 00       	callq  353 <_ZN2mmlsERSoRKNS_7Vector3E+0x73>
+ 2f6:	c5 fb 10 43 10       	vmovsd 0x10(%rbx),%xmm0
+ 2fb:	48 89 ef             	mov    %rbp,%rdi
+ 2fe:	e8 00 00 00 00       	callq  303 <_ZN2mmlsERSoRKNS_7Vector3E+0x73>
 	__ostream_insert(__out, __s,
- 353:	ba 01 00 00 00       	mov    $0x1,%edx
- 358:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 35f <_ZN2mmlsERSoRKNS_7Vector3E+0x7f>
+ 303:	ba 01 00 00 00       	mov    $0x1,%edx
+ 308:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 30f <_ZN2mmlsERSoRKNS_7Vector3E+0x7f>
       { return _M_insert(__f); }
- 35f:	48 89 c7             	mov    %rax,%rdi
+ 30f:	48 89 c7             	mov    %rax,%rdi
 	__ostream_insert(__out, __s,
- 362:	e8 00 00 00 00       	callq  367 <_ZN2mmlsERSoRKNS_7Vector3E+0x87>
+ 312:	e8 00 00 00 00       	callq  317 <_ZN2mmlsERSoRKNS_7Vector3E+0x87>
     os << "[" << vector.x << ", " << vector.y << ", " << vector.z << "]";
     return os;
 }
- 367:	4c 89 e0             	mov    %r12,%rax
- 36a:	5b                   	pop    %rbx
- 36b:	5d                   	pop    %rbp
- 36c:	41 5c                	pop    %r12
- 36e:	c3                   	retq   
+ 317:	4c 89 e0             	mov    %r12,%rax
+ 31a:	5b                   	pop    %rbx
+ 31b:	5d                   	pop    %rbp
+ 31c:	41 5c                	pop    %r12
+ 31e:	c3                   	retq   
 
 Disassembly of section .text.startup:
 
@@ -388,7 +358,7 @@ Disassembly of section .text.startup:
   1b:	48 83 c4 08          	add    $0x8,%rsp
   1f:	48 8d 15 00 00 00 00 	lea    0x0(%rip),%rdx        # 26 <_GLOBAL__sub_I__ZN2mmmlERKNS_7Vector3ES2_+0x26>
   26:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 2d <_GLOBAL__sub_I__ZN2mmmlERKNS_7Vector3ES2_+0x2d>
-  2d:	e9 00 00 00 00       	jmpq   32 <_ZN2mm4normERKNS_7Vector3E+0x2>
+  2d:	e9 00 00 00 00       	jmpq   32 <_ZN2mm4normERKNS_7Vector3E+0x22>
 
 vector_simd.cpp.o:     file format elf64-x86-64
 

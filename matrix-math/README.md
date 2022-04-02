@@ -36,7 +36,18 @@ _one = _mm256_set_pd(one.x, one.y, one.z, 0.0);
 ```
 
 ### Compiling
-So to compile things properly it's also worth using the `RelWithDebInfo` mode in CMake. This gives the following assembly [output](../logs/matrix-math-disassembly.txt).
+I can compile two targets: one is vectorized, the other is not.  I added a compile definitions in [ CMakeLists.txt ](./CMakeLists.txt#L17) to specify which one to use, which is modified with 
+```bash
+cd build
+cmake .. -D VEC=true
+make
+```
+There doesn't seem to be a nice way to change this with a call to `make`.
+
+We need to also use the `-O2 -mavx` compiler flags for manual calls to `make`. 
+
+The output assembly for the scalar functions is seen [here, with a focus on the cross product function](../logs/matrix-math-scalar-disassembly.txt#83), and the vectorized version [here](../logs/matrix-math-vector-disassembly.txt#58).
+
 
 # References
 1. Oracle, _x86 Assembly Language Reference Manual_, https://docs.oracle.com/cd/E36784_01/html/E36859/epmoa.html#scrolltoc
@@ -44,3 +55,4 @@ So to compile things properly it's also worth using the `RelWithDebInfo` mode in
 3. Tables Generator Project, _Markdown Tables generator - TablesGenerator.com_, https://www.tablesgenerator.com/markdown_tables
 4. Intel, _Intel Intrinsics Guide_, https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#techs=AVX&ig_expand=3847,6134,4936&cats=Arithmetic,Set
 5. Wikipedia, _Endianness_, https://en.wikipedia.org/wiki/Endianness
+6. Woods, Chrys, _Efficient Vectorization with C++ - Part 2: AVX Intrinsics_, https://chryswoods.com/vector_c++/immintrin.html

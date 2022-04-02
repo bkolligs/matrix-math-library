@@ -13,4 +13,8 @@ target_include_directories(matrix-math PUBLIC
 )
 
 # can use the flag -fopt-info to print out optimizations
-target_compile_options(matrix-math PUBLIC -mavx2)
+target_compile_options(matrix-math PUBLIC -mavx2 -O2)
+
+if (${VEC})
+target_compile_definitions(matrix-math PRIVATE VECTOR_SIMD)
+endif()
