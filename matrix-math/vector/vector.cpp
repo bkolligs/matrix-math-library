@@ -1,19 +1,33 @@
 #include "vector.h"
 
+#define VECTOR_SIMD
+#ifdef VECTOR_SIMD
+#pragma message("Using Vector SIMD Implementation")
+#include "vector_simd.h"
+#endif
+
 namespace mm {
 
 float operator*(const Vector3& one, const Vector3& two) {
+#ifdef VECTOR_SIMD
+    return simd::__vectorSIMDDot(one, two);
+#else
     return one.x * two.x + one.y * two.y + one.z * two.z;
+#endif
 }
 
 float norm(const Vector3& vector) { return sqrt(vector * vector); }
 
 Vector3 cross(const Vector3& one, const Vector3& two) {
+#ifdef VECTOR_SIMD
+    return simd::__vectorSIMDCross(one, two);
+#else
     return Vector3{
         one.y * two.z - one.z * two.y,
         one.z * two.x - one.x * two.z,
         one.x * two.y - one.y * two.x,
     };
+#endif
 }
 
 bool isApprox(const Vector3& one, const Vector3& two, double atol,

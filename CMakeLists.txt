@@ -3,8 +3,6 @@ project(MATRIX_MATH)
 set(CMAKE_CXX_STANDARD 17)
 enable_testing()
 
-add_subdirectory(eigen)
-add_subdirectory(glm)
 add_subdirectory(matrix-math)
 add_subdirectory(bench)
 add_subdirectory(tests)
