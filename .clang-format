@@ -1,0 +1,16 @@
+BasedOnStyle: Google
+DerivePointerAlignment: false
+PointerAlignment: Left
+IndentWidth: 4
+AlignTrailingComments: true
+AlignConsecutiveAssignments: true
+IndentAccessModifiers: true
+IncludeBlocks: Merge
+IndentPPDirectives: BeforeHash
+
+RawStringFormats:
+- Language: TextProto
+  Delimiters:
+  - 'pb'
+  - 'proto'
+  BasedOnStyle: Google

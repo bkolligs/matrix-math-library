@@ -1,0 +1,8 @@
+
+
+Overall Results
+------------------------------------
+[Custom Cross Product]
+	Average duration: 19.3039ns
+[Custom Dot Product]
+	Average duration: 20.6329ns

@@ -1,0 +1,600 @@
+In archive build/matrix-math/libmatrix-math.a:
+
+matrix.cpp.o:     file format elf64-x86-64
+
+
+vector.cpp.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <_ZN2mmmlERKNS_7Vector3ES2_>:
+#include "vector_simd.h"
+#endif
+
+namespace mm {
+
+float operator*(const Vector3& one, const Vector3& two) {
+   0:	f3 0f 1e fa          	endbr64 
+#ifdef VECTOR_SIMD
+    return simd::__vectorSIMDDot(one, two);
+   4:	e9 00 00 00 00       	jmpq   9 <_ZN2mmmlERKNS_7Vector3ES2_+0x9>
+   9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+
+0000000000000010 <_ZN2mm4normERKNS_7Vector3E>:
+#else
+    return one.x * two.x + one.y * two.y + one.z * two.z;
+#endif
+}
+
+float norm(const Vector3& vector) { return sqrt(vector * vector); }
+  10:	f3 0f 1e fa          	endbr64 
+  14:	48 83 ec 18          	sub    $0x18,%rsp
+    return simd::__vectorSIMDDot(one, two);
+  18:	48 89 fe             	mov    %rdi,%rsi
+  1b:	e8 00 00 00 00       	callq  20 <_ZN2mm4normERKNS_7Vector3E+0x10>
+  using ::sqrt;
+
+#ifndef __CORRECT_ISO_CPP_MATH_H_PROTO
+  inline _GLIBCXX_CONSTEXPR float
+  sqrt(float __x)
+  { return __builtin_sqrtf(__x); }
+  20:	c5 e8 57 d2          	vxorps %xmm2,%xmm2,%xmm2
+  24:	c5 f8 2e d0          	vucomiss %xmm0,%xmm2
+  28:	c5 fa 51 c8          	vsqrtss %xmm0,%xmm0,%xmm1
+  2c:	77 09                	ja     37 <_ZN2mm4normERKNS_7Vector3E+0x27>
+float norm(const Vector3& vector) { return sqrt(vector * vector); }
+  2e:	c5 f8 28 c1          	vmovaps %xmm1,%xmm0
+  32:	48 83 c4 18          	add    $0x18,%rsp
+  36:	c3                   	retq   
+  37:	c5 fa 11 4c 24 0c    	vmovss %xmm1,0xc(%rsp)
+  3d:	e8 00 00 00 00       	callq  42 <_ZN2mm4normERKNS_7Vector3E+0x32>
+  42:	c5 fa 10 4c 24 0c    	vmovss 0xc(%rsp),%xmm1
+  48:	eb e4                	jmp    2e <_ZN2mm4normERKNS_7Vector3E+0x1e>
+  4a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+
+0000000000000050 <_ZN2mm5crossERKNS_7Vector3ES2_>:
+
+Vector3 cross(const Vector3& one, const Vector3& two) {
+  50:	f3 0f 1e fa          	endbr64 
+  54:	41 54                	push   %r12
+  56:	49 89 fc             	mov    %rdi,%r12
+  59:	48 83 ec 10          	sub    $0x10,%rsp
+  5d:	64 48 8b 04 25 28 00 	mov    %fs:0x28,%rax
+  64:	00 00 
+  66:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+  6b:	31 c0                	xor    %eax,%eax
+#ifdef VECTOR_SIMD
+    return simd::__vectorSIMDCross(one, two);
+  6d:	e8 00 00 00 00       	callq  72 <_ZN2mm5crossERKNS_7Vector3ES2_+0x22>
+        one.y * two.z - one.z * two.y,
+        one.z * two.x - one.x * two.z,
+        one.x * two.y - one.y * two.x,
+    };
+#endif
+}
+  72:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+  77:	64 48 33 04 25 28 00 	xor    %fs:0x28,%rax
+  7e:	00 00 
+  80:	75 0a                	jne    8c <_ZN2mm5crossERKNS_7Vector3ES2_+0x3c>
+  82:	48 83 c4 10          	add    $0x10,%rsp
+  86:	4c 89 e0             	mov    %r12,%rax
+  89:	41 5c                	pop    %r12
+  8b:	c3                   	retq   
+  8c:	e8 00 00 00 00       	callq  91 <_ZN2mm5crossERKNS_7Vector3ES2_+0x41>
+  91:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+  98:	00 00 00 00 
+  9c:	0f 1f 40 00          	nopl   0x0(%rax)
+
+00000000000000a0 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd>:
+
+bool isApprox(const Vector3& one, const Vector3& two, double atol,
+              double rtol) {
+  a0:	f3 0f 1e fa          	endbr64 
+  a4:	55                   	push   %rbp
+  a5:	c5 f9 28 d0          	vmovapd %xmm0,%xmm2
+  a9:	c5 f9 28 d9          	vmovapd %xmm1,%xmm3
+  ad:	48 89 fd             	mov    %rdi,%rbp
+  b0:	53                   	push   %rbx
+  b1:	48 89 f3             	mov    %rsi,%rbx
+  b4:	48 83 ec 18          	sub    $0x18,%rsp
+    return utils::isApprox(one.x, two.x, atol, rtol) and
+  b8:	c5 fb 11 4c 24 08    	vmovsd %xmm1,0x8(%rsp)
+  be:	c5 fb 10 0e          	vmovsd (%rsi),%xmm1
+  c2:	c5 fb 11 04 24       	vmovsd %xmm0,(%rsp)
+  c7:	c5 fb 10 07          	vmovsd (%rdi),%xmm0
+  cb:	e8 00 00 00 00       	callq  d0 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x30>
+           utils::isApprox(one.y, two.y, atol, rtol) and
+  d0:	c5 fb 10 14 24       	vmovsd (%rsp),%xmm2
+  d5:	c5 fb 10 5c 24 08    	vmovsd 0x8(%rsp),%xmm3
+  db:	84 c0                	test   %al,%al
+  dd:	75 11                	jne    f0 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x50>
+           utils::isApprox(one.z, two.z, atol, rtol);
+}
+  df:	48 83 c4 18          	add    $0x18,%rsp
+  e3:	31 c0                	xor    %eax,%eax
+  e5:	5b                   	pop    %rbx
+  e6:	5d                   	pop    %rbp
+  e7:	c3                   	retq   
+  e8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+  ef:	00 
+           utils::isApprox(one.y, two.y, atol, rtol) and
+  f0:	c5 fb 10 45 08       	vmovsd 0x8(%rbp),%xmm0
+  f5:	c5 fb 10 4b 08       	vmovsd 0x8(%rbx),%xmm1
+  fa:	e8 00 00 00 00       	callq  ff <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x5f>
+    return utils::isApprox(one.x, two.x, atol, rtol) and
+  ff:	c5 fb 10 14 24       	vmovsd (%rsp),%xmm2
+ 104:	c5 fb 10 5c 24 08    	vmovsd 0x8(%rsp),%xmm3
+ 10a:	84 c0                	test   %al,%al
+ 10c:	74 d1                	je     df <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x3f>
+           utils::isApprox(one.z, two.z, atol, rtol);
+ 10e:	c5 fb 10 45 10       	vmovsd 0x10(%rbp),%xmm0
+ 113:	c5 fb 10 4b 10       	vmovsd 0x10(%rbx),%xmm1
+}
+ 118:	48 83 c4 18          	add    $0x18,%rsp
+ 11c:	5b                   	pop    %rbx
+ 11d:	5d                   	pop    %rbp
+           utils::isApprox(one.z, two.z, atol, rtol);
+ 11e:	e9 00 00 00 00       	jmpq   123 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd+0x83>
+ 123:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+ 12a:	00 00 00 00 
+ 12e:	66 90                	xchg   %ax,%ax
+
+0000000000000130 <_ZN2mmplERKNS_7Vector3ES2_>:
+
+Vector3 operator+(const Vector3& one, const Vector3& two) {
+ 130:	f3 0f 1e fa          	endbr64 
+    return Vector3{one.x + two.x, one.y + two.y, one.z + two.z};
+ 134:	c5 fb 10 06          	vmovsd (%rsi),%xmm0
+ 138:	c5 fb 58 02          	vaddsd (%rdx),%xmm0,%xmm0
+Vector3 operator+(const Vector3& one, const Vector3& two) {
+ 13c:	48 89 f8             	mov    %rdi,%rax
+    return Vector3{one.x + two.x, one.y + two.y, one.z + two.z};
+ 13f:	c5 fb 11 07          	vmovsd %xmm0,(%rdi)
+ 143:	c5 fb 10 46 08       	vmovsd 0x8(%rsi),%xmm0
+ 148:	c5 fb 58 42 08       	vaddsd 0x8(%rdx),%xmm0,%xmm0
+ 14d:	c5 fb 11 47 08       	vmovsd %xmm0,0x8(%rdi)
+ 152:	c5 fb 10 46 10       	vmovsd 0x10(%rsi),%xmm0
+ 157:	c5 fb 58 42 10       	vaddsd 0x10(%rdx),%xmm0,%xmm0
+ 15c:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
+}
+ 161:	c3                   	retq   
+ 162:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+ 169:	00 00 00 00 
+ 16d:	0f 1f 00             	nopl   (%rax)
+
+0000000000000170 <_ZN2mmmiERKNS_7Vector3ES2_>:
+
+Vector3 operator-(const Vector3& one, const Vector3& two) {
+ 170:	f3 0f 1e fa          	endbr64 
+    return Vector3{one.x - two.x, one.y - two.y, one.z - two.z};
+ 174:	c5 fb 10 06          	vmovsd (%rsi),%xmm0
+ 178:	c5 fb 5c 02          	vsubsd (%rdx),%xmm0,%xmm0
+Vector3 operator-(const Vector3& one, const Vector3& two) {
+ 17c:	48 89 f8             	mov    %rdi,%rax
+    return Vector3{one.x - two.x, one.y - two.y, one.z - two.z};
+ 17f:	c5 fb 11 07          	vmovsd %xmm0,(%rdi)
+ 183:	c5 fb 10 46 08       	vmovsd 0x8(%rsi),%xmm0
+ 188:	c5 fb 5c 42 08       	vsubsd 0x8(%rdx),%xmm0,%xmm0
+ 18d:	c5 fb 11 47 08       	vmovsd %xmm0,0x8(%rdi)
+ 192:	c5 fb 10 46 10       	vmovsd 0x10(%rsi),%xmm0
+ 197:	c5 fb 5c 42 10       	vsubsd 0x10(%rdx),%xmm0,%xmm0
+ 19c:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
+}
+ 1a1:	c3                   	retq   
+ 1a2:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+ 1a9:	00 00 00 00 
+ 1ad:	0f 1f 00             	nopl   (%rax)
+
+00000000000001b0 <_ZN2mmeqERKNS_7Vector3ES2_>:
+
+bool operator==(const Vector3& one, const Vector3& two) {
+ 1b0:	f3 0f 1e fa          	endbr64 
+    return isApprox(one, two);
+ 1b4:	c5 fb 10 0d 00 00 00 	vmovsd 0x0(%rip),%xmm1        # 1bc <_ZN2mmeqERKNS_7Vector3ES2_+0xc>
+ 1bb:	00 
+ 1bc:	c5 f9 57 c0          	vxorpd %xmm0,%xmm0,%xmm0
+ 1c0:	e9 db fe ff ff       	jmpq   a0 <_ZN2mm8isApproxERKNS_7Vector3ES2_dd>
+ 1c5:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+ 1cc:	00 00 00 00 
+
+00000000000001d0 <_ZN2mmmlEfRKNS_7Vector3E>:
+}
+
+Vector3 operator*(const float scalar, const Vector3& vector) {
+ 1d0:	f3 0f 1e fa          	endbr64 
+    return Vector3{scalar * vector.x, scalar * vector.y, scalar * vector.z};
+ 1d4:	c5 fa 5a c0          	vcvtss2sd %xmm0,%xmm0,%xmm0
+ 1d8:	c5 fb 59 0e          	vmulsd (%rsi),%xmm0,%xmm1
+Vector3 operator*(const float scalar, const Vector3& vector) {
+ 1dc:	48 89 f8             	mov    %rdi,%rax
+    return Vector3{scalar * vector.x, scalar * vector.y, scalar * vector.z};
+ 1df:	c5 fb 11 0f          	vmovsd %xmm1,(%rdi)
+ 1e3:	c5 fb 59 4e 08       	vmulsd 0x8(%rsi),%xmm0,%xmm1
+ 1e8:	c5 fb 59 46 10       	vmulsd 0x10(%rsi),%xmm0,%xmm0
+ 1ed:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
+ 1f2:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
+}
+ 1f7:	c3                   	retq   
+ 1f8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 1ff:	00 
+
+0000000000000200 <_ZN2mmdvEfRKNS_7Vector3E>:
+
+Vector3 operator/(const float scalar, const Vector3& vector) {
+ 200:	f3 0f 1e fa          	endbr64 
+    return Vector3{scalar / vector.x, scalar / vector.y, scalar / vector.z};
+ 204:	c5 fa 5a c0          	vcvtss2sd %xmm0,%xmm0,%xmm0
+Vector3 operator/(const float scalar, const Vector3& vector) {
+ 208:	48 89 f8             	mov    %rdi,%rax
+    return Vector3{scalar / vector.x, scalar / vector.y, scalar / vector.z};
+ 20b:	c5 fb 5e 0e          	vdivsd (%rsi),%xmm0,%xmm1
+ 20f:	c5 fb 11 0f          	vmovsd %xmm1,(%rdi)
+ 213:	c5 fb 5e 4e 08       	vdivsd 0x8(%rsi),%xmm0,%xmm1
+ 218:	c5 fb 5e 46 10       	vdivsd 0x10(%rsi),%xmm0,%xmm0
+ 21d:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
+ 222:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
+}
+ 227:	c3                   	retq   
+ 228:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 22f:	00 
+
+0000000000000230 <_ZN2mmplEfRKNS_7Vector3E>:
+
+Vector3 operator+(const float scalar, const Vector3& vector) {
+ 230:	f3 0f 1e fa          	endbr64 
+    return Vector3{scalar + vector.x, scalar + vector.y, scalar + vector.z};
+ 234:	c5 fa 5a c0          	vcvtss2sd %xmm0,%xmm0,%xmm0
+ 238:	c5 fb 58 0e          	vaddsd (%rsi),%xmm0,%xmm1
+Vector3 operator+(const float scalar, const Vector3& vector) {
+ 23c:	48 89 f8             	mov    %rdi,%rax
+    return Vector3{scalar + vector.x, scalar + vector.y, scalar + vector.z};
+ 23f:	c5 fb 11 0f          	vmovsd %xmm1,(%rdi)
+ 243:	c5 fb 58 4e 08       	vaddsd 0x8(%rsi),%xmm0,%xmm1
+ 248:	c5 fb 58 46 10       	vaddsd 0x10(%rsi),%xmm0,%xmm0
+ 24d:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
+ 252:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
+}
+ 257:	c3                   	retq   
+ 258:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 25f:	00 
+
+0000000000000260 <_ZN2mmmiEfRKNS_7Vector3E>:
+
+Vector3 operator-(const float scalar, const Vector3& vector) {
+ 260:	f3 0f 1e fa          	endbr64 
+    return Vector3{scalar - vector.x, scalar - vector.y, scalar - vector.z};
+ 264:	c5 fa 5a c0          	vcvtss2sd %xmm0,%xmm0,%xmm0
+ 268:	c5 fb 5c 0e          	vsubsd (%rsi),%xmm0,%xmm1
+Vector3 operator-(const float scalar, const Vector3& vector) {
+ 26c:	48 89 f8             	mov    %rdi,%rax
+    return Vector3{scalar - vector.x, scalar - vector.y, scalar - vector.z};
+ 26f:	c5 fb 11 0f          	vmovsd %xmm1,(%rdi)
+ 273:	c5 fb 5c 4e 08       	vsubsd 0x8(%rsi),%xmm0,%xmm1
+ 278:	c5 fb 5c 46 10       	vsubsd 0x10(%rsi),%xmm0,%xmm0
+ 27d:	c5 fb 11 4f 08       	vmovsd %xmm1,0x8(%rdi)
+ 282:	c5 fb 11 47 10       	vmovsd %xmm0,0x10(%rdi)
+}
+ 287:	c3                   	retq   
+ 288:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 28f:	00 
+
+0000000000000290 <_ZN2mmlsERSoRKNS_7Vector3E>:
+std::ostream& operator<<(std::ostream& os, const Vector3& vector) {
+ 290:	f3 0f 1e fa          	endbr64 
+ 294:	41 54                	push   %r12
+    operator<<(basic_ostream<char, _Traits>& __out, const char* __s)
+    {
+      if (!__s)
+	__out.setstate(ios_base::badbit);
+      else
+	__ostream_insert(__out, __s,
+ 296:	ba 01 00 00 00       	mov    $0x1,%edx
+ 29b:	49 89 fc             	mov    %rdi,%r12
+ 29e:	55                   	push   %rbp
+ 29f:	53                   	push   %rbx
+ 2a0:	48 89 f3             	mov    %rsi,%rbx
+ 2a3:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 2aa <_ZN2mmlsERSoRKNS_7Vector3E+0x1a>
+ 2aa:	e8 00 00 00 00       	callq  2af <_ZN2mmlsERSoRKNS_7Vector3E+0x1f>
+      { return _M_insert(__f); }
+ 2af:	c5 fb 10 03          	vmovsd (%rbx),%xmm0
+ 2b3:	4c 89 e7             	mov    %r12,%rdi
+ 2b6:	e8 00 00 00 00       	callq  2bb <_ZN2mmlsERSoRKNS_7Vector3E+0x2b>
+	__ostream_insert(__out, __s,
+ 2bb:	ba 02 00 00 00       	mov    $0x2,%edx
+ 2c0:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 2c7 <_ZN2mmlsERSoRKNS_7Vector3E+0x37>
+ 2c7:	48 89 c7             	mov    %rax,%rdi
+      { return _M_insert(__f); }
+ 2ca:	48 89 c5             	mov    %rax,%rbp
+	__ostream_insert(__out, __s,
+ 2cd:	e8 00 00 00 00       	callq  2d2 <_ZN2mmlsERSoRKNS_7Vector3E+0x42>
+      { return _M_insert(__f); }
+ 2d2:	c5 fb 10 43 08       	vmovsd 0x8(%rbx),%xmm0
+ 2d7:	48 89 ef             	mov    %rbp,%rdi
+ 2da:	e8 00 00 00 00       	callq  2df <_ZN2mmlsERSoRKNS_7Vector3E+0x4f>
+	__ostream_insert(__out, __s,
+ 2df:	ba 02 00 00 00       	mov    $0x2,%edx
+ 2e4:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 2eb <_ZN2mmlsERSoRKNS_7Vector3E+0x5b>
+ 2eb:	48 89 c7             	mov    %rax,%rdi
+      { return _M_insert(__f); }
+ 2ee:	48 89 c5             	mov    %rax,%rbp
+	__ostream_insert(__out, __s,
+ 2f1:	e8 00 00 00 00       	callq  2f6 <_ZN2mmlsERSoRKNS_7Vector3E+0x66>
+      { return _M_insert(__f); }
+ 2f6:	c5 fb 10 43 10       	vmovsd 0x10(%rbx),%xmm0
+ 2fb:	48 89 ef             	mov    %rbp,%rdi
+ 2fe:	e8 00 00 00 00       	callq  303 <_ZN2mmlsERSoRKNS_7Vector3E+0x73>
+	__ostream_insert(__out, __s,
+ 303:	ba 01 00 00 00       	mov    $0x1,%edx
+ 308:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 30f <_ZN2mmlsERSoRKNS_7Vector3E+0x7f>
+      { return _M_insert(__f); }
+ 30f:	48 89 c7             	mov    %rax,%rdi
+	__ostream_insert(__out, __s,
+ 312:	e8 00 00 00 00       	callq  317 <_ZN2mmlsERSoRKNS_7Vector3E+0x87>
+    os << "[" << vector.x << ", " << vector.y << ", " << vector.z << "]";
+    return os;
+}
+ 317:	4c 89 e0             	mov    %r12,%rax
+ 31a:	5b                   	pop    %rbx
+ 31b:	5d                   	pop    %rbp
+ 31c:	41 5c                	pop    %r12
+ 31e:	c3                   	retq   
+
+Disassembly of section .text.startup:
+
+0000000000000000 <_GLOBAL__sub_I__ZN2mmmlERKNS_7Vector3ES2_>:
+
+   0:	f3 0f 1e fa          	endbr64 
+   4:	48 83 ec 08          	sub    $0x8,%rsp
+  extern wostream wclog;	/// Linked to standard error (buffered)
+#endif
+  ///@}
+
+  // For construction of filebuffers for cout, cin, cerr, clog et. al.
+  static ios_base::Init __ioinit;
+   8:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # f <_GLOBAL__sub_I__ZN2mmmlERKNS_7Vector3ES2_+0xf>
+   f:	e8 00 00 00 00       	callq  14 <_GLOBAL__sub_I__ZN2mmmlERKNS_7Vector3ES2_+0x14>
+  14:	48 8b 3d 00 00 00 00 	mov    0x0(%rip),%rdi        # 1b <_GLOBAL__sub_I__ZN2mmmlERKNS_7Vector3ES2_+0x1b>
+  1b:	48 83 c4 08          	add    $0x8,%rsp
+  1f:	48 8d 15 00 00 00 00 	lea    0x0(%rip),%rdx        # 26 <_GLOBAL__sub_I__ZN2mmmlERKNS_7Vector3ES2_+0x26>
+  26:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 2d <_GLOBAL__sub_I__ZN2mmmlERKNS_7Vector3ES2_+0x2d>
+  2d:	e9 00 00 00 00       	jmpq   32 <_ZN2mm4normERKNS_7Vector3E+0x22>
+
+vector_simd.cpp.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <_ZN2mm4simd15__vectorSIMDDotERKNS_7Vector3ES3_>:
+{
+
+namespace simd
+{
+
+float __vectorSIMDDot(const Vector3& one, const Vector3& two) {
+   0:	f3 0f 1e fa          	endbr64 
+
+/* Create the vector [A B C D].  */
+extern __inline __m256d __attribute__((__gnu_inline__, __always_inline__, __artificial__))
+_mm256_set_pd (double __A, double __B, double __C, double __D)
+{
+  return __extension__ (__m256d){ __D, __C, __B, __A };
+   4:	c5 fb 10 47 08       	vmovsd 0x8(%rdi),%xmm0
+   9:	c5 f1 57 c9          	vxorpd %xmm1,%xmm1,%xmm1
+   d:	c5 f9 16 17          	vmovhpd (%rdi),%xmm0,%xmm2
+  11:	c5 f1 16 47 10       	vmovhpd 0x10(%rdi),%xmm1,%xmm0
+  16:	c5 f1 16 4e 10       	vmovhpd 0x10(%rsi),%xmm1,%xmm1
+  1b:	c4 e3 7d 18 c2 01    	vinsertf128 $0x1,%xmm2,%ymm0,%ymm0
+  21:	c5 fb 10 56 08       	vmovsd 0x8(%rsi),%xmm2
+  26:	c5 e9 16 16          	vmovhpd (%rsi),%xmm2,%xmm2
+  2a:	c4 e3 75 18 ca 01    	vinsertf128 $0x1,%xmm2,%ymm1,%ymm1
+  return (__m256d) ((__v4df)__A * (__v4df)__B);
+  30:	c5 fd 59 c1          	vmulpd %ymm1,%ymm0,%ymm0
+
+	/* multiply the vectors together */
+	_a = _mm256_mul_pd(_one, _two);
+
+	#ifdef __linux__
+		return _a[0] + _a[1] + _a[2] + _a[3];
+  34:	c5 f9 7c c8          	vhaddpd %xmm0,%xmm0,%xmm1
+  38:	c4 e3 7d 19 c0 01    	vextractf128 $0x1,%ymm0,%xmm0
+  3e:	c5 f3 58 c8          	vaddsd %xmm0,%xmm1,%xmm1
+  42:	c5 f9 15 c0          	vunpckhpd %xmm0,%xmm0,%xmm0
+  46:	c5 f3 58 c0          	vaddsd %xmm0,%xmm1,%xmm0
+  4a:	c5 fb 5a c0          	vcvtsd2ss %xmm0,%xmm0,%xmm0
+  4e:	c5 f8 77             	vzeroupper 
+	#endif
+
+}
+  51:	c3                   	retq   
+  52:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
+  59:	00 00 00 00 
+  5d:	0f 1f 00             	nopl   (%rax)
+
+0000000000000060 <_ZN2mm4simd17__vectorSIMDCrossERKNS_7Vector3ES3_>:
+
+Vector3 __vectorSIMDCross(const Vector3& one, const Vector3& two) {
+  60:	f3 0f 1e fa          	endbr64 
+	__m256d _one, _two, _a, _b, _c;
+	/* Populate the vectors */
+	_one = _mm256_set_pd(one.y, one.z, one.x, 0.0);
+  64:	c5 fb 10 26          	vmovsd (%rsi),%xmm4
+  68:	c5 7b 10 46 10       	vmovsd 0x10(%rsi),%xmm8
+  return __extension__ (__m256d){ __D, __C, __B, __A };
+  6d:	c5 e9 57 d2          	vxorpd %xmm2,%xmm2,%xmm2
+Vector3 __vectorSIMDCross(const Vector3& one, const Vector3& two) {
+  71:	48 89 f8             	mov    %rdi,%rax
+	_one = _mm256_set_pd(one.y, one.z, one.x, 0.0);
+  74:	c5 fb 10 4e 08       	vmovsd 0x8(%rsi),%xmm1
+	_two = _mm256_set_pd(two.z, two.x, two.y, 0.0);
+  79:	c5 fb 10 7a 08       	vmovsd 0x8(%rdx),%xmm7
+  7e:	c5 fb 10 32          	vmovsd (%rdx),%xmm6
+  82:	c5 fb 10 5a 10       	vmovsd 0x10(%rdx),%xmm3
+  87:	c5 e9 14 c4          	vunpcklpd %xmm4,%xmm2,%xmm0
+  8b:	c4 c1 59 14 e0       	vunpcklpd %xmm8,%xmm4,%xmm4
+  90:	c5 b9 14 e9          	vunpcklpd %xmm1,%xmm8,%xmm5
+  94:	c5 e9 14 c9          	vunpcklpd %xmm1,%xmm2,%xmm1
+  98:	c5 49 14 cb          	vunpcklpd %xmm3,%xmm6,%xmm9
+  9c:	c4 e3 7d 18 c5 01    	vinsertf128 $0x1,%xmm5,%ymm0,%ymm0
+  a2:	c5 e1 14 df          	vunpcklpd %xmm7,%xmm3,%xmm3
+  a6:	c5 e9 14 ef          	vunpcklpd %xmm7,%xmm2,%xmm5
+  aa:	c5 e9 14 d6          	vunpcklpd %xmm6,%xmm2,%xmm2
+  ae:	c4 e3 75 18 cc 01    	vinsertf128 $0x1,%xmm4,%ymm1,%ymm1
+  b4:	c4 c3 55 18 e9 01    	vinsertf128 $0x1,%xmm9,%ymm5,%ymm5
+  ba:	c4 e3 6d 18 d3 01    	vinsertf128 $0x1,%xmm3,%ymm2,%ymm2
+  return (__m256d) ((__v4df)__A * (__v4df)__B);
+  c0:	c5 f5 59 ca          	vmulpd %ymm2,%ymm1,%ymm1
+  c4:	c5 fd 59 c5          	vmulpd %ymm5,%ymm0,%ymm0
+  return (__m256d) ((__v4df)__A - (__v4df)__B);
+  c8:	c5 fd 5c c1          	vsubpd %ymm1,%ymm0,%ymm0
+	_b =_mm256_mul_pd(_one, _two);
+
+	_c = _mm256_sub_pd(_a, _b);
+
+	#if defined(MM_ENDIAN_LITTLE) and defined(__linux__)
+		return Vector3{_c[3], _c[2], _c[1]};
+  cc:	c4 e3 7d 19 c1 01    	vextractf128 $0x1,%ymm0,%xmm1
+  d2:	c5 f9 17 47 10       	vmovhpd %xmm0,0x10(%rdi)
+  d7:	c5 f9 17 0f          	vmovhpd %xmm1,(%rdi)
+  db:	c5 f9 13 4f 08       	vmovlpd %xmm1,0x8(%rdi)
+  e0:	c5 f8 77             	vzeroupper 
+	#elif defined(__linux__)
+		return Vector3{_c[0], _c[1], _c[2]};
+	#endif
+
+}
+  e3:	c3                   	retq   
+
+Disassembly of section .text.startup:
+
+0000000000000000 <_GLOBAL__sub_I__ZN2mm4simd15__vectorSIMDDotERKNS_7Vector3ES3_>:
+	
+} // namespace simd
+	
+	
+} // namespace mm
+   0:	f3 0f 1e fa          	endbr64 
+   4:	48 83 ec 08          	sub    $0x8,%rsp
+  extern wostream wclog;	/// Linked to standard error (buffered)
+#endif
+  ///@}
+
+  // For construction of filebuffers for cout, cin, cerr, clog et. al.
+  static ios_base::Init __ioinit;
+   8:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # f <_GLOBAL__sub_I__ZN2mm4simd15__vectorSIMDDotERKNS_7Vector3ES3_+0xf>
+   f:	e8 00 00 00 00       	callq  14 <_GLOBAL__sub_I__ZN2mm4simd15__vectorSIMDDotERKNS_7Vector3ES3_+0x14>
+  14:	48 8b 3d 00 00 00 00 	mov    0x0(%rip),%rdi        # 1b <_GLOBAL__sub_I__ZN2mm4simd15__vectorSIMDDotERKNS_7Vector3ES3_+0x1b>
+  1b:	48 83 c4 08          	add    $0x8,%rsp
+  1f:	48 8d 15 00 00 00 00 	lea    0x0(%rip),%rdx        # 26 <_GLOBAL__sub_I__ZN2mm4simd15__vectorSIMDDotERKNS_7Vector3ES3_+0x26>
+  26:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 2d <_GLOBAL__sub_I__ZN2mm4simd15__vectorSIMDDotERKNS_7Vector3ES3_+0x2d>
+  2d:	e9 00 00 00 00       	jmpq   32 <_GLOBAL__sub_I__ZN2mm4simd15__vectorSIMDDotERKNS_7Vector3ES3_+0x32>
+
+utils.cpp.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <_ZN2mm5utils4normEd>:
+#include "utils.h"
+namespace mm {
+
+namespace utils {
+
+double norm(double x) { return sqrt(x * x); }
+   0:	f3 0f 1e fa          	endbr64 
+   4:	c5 fb 59 c0          	vmulsd %xmm0,%xmm0,%xmm0
+   8:	c5 e9 57 d2          	vxorpd %xmm2,%xmm2,%xmm2
+   c:	c5 f9 2e d0          	vucomisd %xmm0,%xmm2
+  10:	c5 fb 51 c8          	vsqrtsd %xmm0,%xmm0,%xmm1
+  14:	77 05                	ja     1b <_ZN2mm5utils4normEd+0x1b>
+  16:	c5 f9 28 c1          	vmovapd %xmm1,%xmm0
+  1a:	c3                   	retq   
+  1b:	48 83 ec 18          	sub    $0x18,%rsp
+  1f:	c5 fb 11 4c 24 08    	vmovsd %xmm1,0x8(%rsp)
+  25:	e8 00 00 00 00       	callq  2a <_ZN2mm5utils4normEd+0x2a>
+  2a:	c5 fb 10 4c 24 08    	vmovsd 0x8(%rsp),%xmm1
+  30:	48 83 c4 18          	add    $0x18,%rsp
+  34:	c5 f9 28 c1          	vmovapd %xmm1,%xmm0
+  38:	c3                   	retq   
+  39:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+
+0000000000000040 <_ZN2mm5utils8isApproxEdddd>:
+
+bool isApprox(double x, double y, double atol, double rtol) {
+  40:	f3 0f 1e fa          	endbr64 
+  44:	c5 f9 28 e0          	vmovapd %xmm0,%xmm4
+    return norm(x - y) <= std::max(atol, rtol * std::max(norm(x), norm(y)));
+  48:	c5 fb 5c c1          	vsubsd %xmm1,%xmm0,%xmm0
+double norm(double x) { return sqrt(x * x); }
+  4c:	c5 c9 57 f6          	vxorpd %xmm6,%xmm6,%xmm6
+bool isApprox(double x, double y, double atol, double rtol) {
+  50:	48 83 ec 38          	sub    $0x38,%rsp
+double norm(double x) { return sqrt(x * x); }
+  54:	c5 fb 59 c0          	vmulsd %xmm0,%xmm0,%xmm0
+  58:	c5 f9 2e f0          	vucomisd %xmm0,%xmm6
+  5c:	c5 fb 51 f8          	vsqrtsd %xmm0,%xmm0,%xmm7
+  60:	77 38                	ja     9a <_ZN2mm5utils8isApproxEdddd+0x5a>
+  62:	c5 f3 59 c9          	vmulsd %xmm1,%xmm1,%xmm1
+  66:	c5 f9 2e f1          	vucomisd %xmm1,%xmm6
+  6a:	c5 f3 51 e9          	vsqrtsd %xmm1,%xmm1,%xmm5
+  6e:	0f 87 b7 00 00 00    	ja     12b <_ZN2mm5utils8isApproxEdddd+0xeb>
+  74:	c5 db 59 e4          	vmulsd %xmm4,%xmm4,%xmm4
+  78:	c5 f9 2e f4          	vucomisd %xmm4,%xmm6
+  7c:	c5 db 51 cc          	vsqrtsd %xmm4,%xmm4,%xmm1
+  80:	77 5f                	ja     e1 <_ZN2mm5utils8isApproxEdddd+0xa1>
+      // concept requirements
+      __glibcxx_function_requires(_LessThanComparableConcept<_Tp>)
+      //return  __a < __b ? __b : __a;
+      if (__a < __b)
+	return __b;
+      return __a;
+  82:	c5 d3 5f e9          	vmaxsd %xmm1,%xmm5,%xmm5
+    return norm(x - y) <= std::max(atol, rtol * std::max(norm(x), norm(y)));
+  86:	c5 d3 59 eb          	vmulsd %xmm3,%xmm5,%xmm5
+  8a:	c5 d3 5f ea          	vmaxsd %xmm2,%xmm5,%xmm5
+  8e:	c5 f9 2f ef          	vcomisd %xmm7,%xmm5
+  92:	0f 93 c0             	setae  %al
+}
+  95:	48 83 c4 38          	add    $0x38,%rsp
+  99:	c3                   	retq   
+  9a:	c5 fb 11 5c 24 28    	vmovsd %xmm3,0x28(%rsp)
+  a0:	c5 fb 11 54 24 20    	vmovsd %xmm2,0x20(%rsp)
+  a6:	c5 fb 11 4c 24 18    	vmovsd %xmm1,0x18(%rsp)
+  ac:	c5 fb 11 64 24 10    	vmovsd %xmm4,0x10(%rsp)
+  b2:	c5 fb 11 7c 24 08    	vmovsd %xmm7,0x8(%rsp)
+double norm(double x) { return sqrt(x * x); }
+  b8:	e8 00 00 00 00       	callq  bd <_ZN2mm5utils8isApproxEdddd+0x7d>
+  bd:	c5 fb 10 5c 24 28    	vmovsd 0x28(%rsp),%xmm3
+  c3:	c5 c9 57 f6          	vxorpd %xmm6,%xmm6,%xmm6
+  c7:	c5 fb 10 54 24 20    	vmovsd 0x20(%rsp),%xmm2
+  cd:	c5 fb 10 4c 24 18    	vmovsd 0x18(%rsp),%xmm1
+  d3:	c5 fb 10 64 24 10    	vmovsd 0x10(%rsp),%xmm4
+  d9:	c5 fb 10 7c 24 08    	vmovsd 0x8(%rsp),%xmm7
+  df:	eb 81                	jmp    62 <_ZN2mm5utils8isApproxEdddd+0x22>
+  e1:	c5 f9 28 c4          	vmovapd %xmm4,%xmm0
+  e5:	c5 fb 11 5c 24 28    	vmovsd %xmm3,0x28(%rsp)
+  eb:	c5 fb 11 54 24 20    	vmovsd %xmm2,0x20(%rsp)
+  f1:	c5 fb 11 7c 24 18    	vmovsd %xmm7,0x18(%rsp)
+  f7:	c5 fb 11 4c 24 10    	vmovsd %xmm1,0x10(%rsp)
+  fd:	c5 fb 11 6c 24 08    	vmovsd %xmm5,0x8(%rsp)
+ 103:	e8 00 00 00 00       	callq  108 <_ZN2mm5utils8isApproxEdddd+0xc8>
+ 108:	c5 fb 10 5c 24 28    	vmovsd 0x28(%rsp),%xmm3
+ 10e:	c5 fb 10 54 24 20    	vmovsd 0x20(%rsp),%xmm2
+ 114:	c5 fb 10 7c 24 18    	vmovsd 0x18(%rsp),%xmm7
+ 11a:	c5 fb 10 4c 24 10    	vmovsd 0x10(%rsp),%xmm1
+ 120:	c5 fb 10 6c 24 08    	vmovsd 0x8(%rsp),%xmm5
+ 126:	e9 57 ff ff ff       	jmpq   82 <_ZN2mm5utils8isApproxEdddd+0x42>
+ 12b:	c5 f9 28 c1          	vmovapd %xmm1,%xmm0
+ 12f:	c5 fb 11 5c 24 28    	vmovsd %xmm3,0x28(%rsp)
+ 135:	c5 fb 11 54 24 20    	vmovsd %xmm2,0x20(%rsp)
+ 13b:	c5 fb 11 64 24 18    	vmovsd %xmm4,0x18(%rsp)
+ 141:	c5 fb 11 7c 24 10    	vmovsd %xmm7,0x10(%rsp)
+ 147:	c5 fb 11 6c 24 08    	vmovsd %xmm5,0x8(%rsp)
+ 14d:	e8 00 00 00 00       	callq  152 <_ZN2mm5utils8isApproxEdddd+0x112>
+ 152:	c5 fb 10 5c 24 28    	vmovsd 0x28(%rsp),%xmm3
+ 158:	c5 c9 57 f6          	vxorpd %xmm6,%xmm6,%xmm6
+ 15c:	c5 fb 10 54 24 20    	vmovsd 0x20(%rsp),%xmm2
+ 162:	c5 fb 10 64 24 18    	vmovsd 0x18(%rsp),%xmm4
+ 168:	c5 fb 10 7c 24 10    	vmovsd 0x10(%rsp),%xmm7
+ 16e:	c5 fb 10 6c 24 08    	vmovsd 0x8(%rsp),%xmm5
+ 174:	e9 fb fe ff ff       	jmpq   74 <_ZN2mm5utils8isApproxEdddd+0x34>
