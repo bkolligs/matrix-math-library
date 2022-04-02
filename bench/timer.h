@@ -39,18 +39,18 @@ class Timer {
             endPoint_ = std::chrono::high_resolution_clock::now();
             /* Now convert the time of the endpoint into microseconds, and  get
              * the integer time since epoch*/
-            auto start = std::chrono::time_point_cast<std::chrono::nanoseconds>(
+            auto start = std::chrono::time_point_cast<std::chrono::microseconds>(
                              startPoint_)
                              .time_since_epoch()
                              .count();
-            auto end = std::chrono::time_point_cast<std::chrono::nanoseconds>(
+            auto end = std::chrono::time_point_cast<std::chrono::microseconds>(
                            endPoint_)
                            .time_since_epoch()
                            .count();
 
             /* Output duration in milliseconds */
             long duration       = (end - start);
-            double milliseconds = duration * 1E-6;
+            double milliseconds = duration * 1E-3;
 
             /* Store the result in the vector */
             TimeResults[timerName_].push_back(duration);
@@ -58,7 +58,7 @@ class Timer {
             if (verbose_) {
                 outFile_ << "[" << timerName_ << ":" << timerID_ << "] "
                          << "\n\tStart: " << start << "\n\tEnd: " << end
-                         << "\n\tDuration: " << duration << "ns ("
+                         << "\n\tDuration: " << duration << "us ("
                          << milliseconds << "ms)" << std::endl;
             }
         }

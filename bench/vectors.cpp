@@ -18,7 +18,7 @@ void analyzeResults(std::ofstream& outfile) {
 
         /* Print out mean with the name*/
         outfile << "[" << item.first << "]"
-                << "\n\tAverage duration: " << mean << "ns" << std::endl;
+                << "\n\tAverage duration: " << mean << "us" << std::endl;
     }
 
     std::cout << "Finished!" << std::endl;

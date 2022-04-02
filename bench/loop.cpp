@@ -28,26 +28,31 @@ int main() {
     }
 
     std::ofstream outfile("../logs/bench-loops.txt", std::ofstream::out);
-    uint numberOfTests = 2E9;
+    uint numberOfTests = 2E6;
+    std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
 
-    bench::Timer timer(outfile, "Entire Test", true);
-    {
-        bench::Timer timer(outfile, "Scalar Loop", true);
-        for (int j = 0; j < numberOfTests; ++j) {
-            for (int i = 0; i < size; ++i) {
-                c[i] = a[i] + b[i];
-            }
+    start = std::chrono::high_resolution_clock::now();
+    for (int j = 0; j < numberOfTests; ++j) {
+        for (int i = 0; i < size; ++i) {
+            c[i] = a[i] + b[i];
         }
     }
+    end = std::chrono::high_resolution_clock::now();
 
-    {
-        bench::Timer timer(outfile, "Vectorized Loop", true);
-        for (int j = 0; j < numberOfTests; ++j) {
-            for (int i = 0; i < size / 8; ++i) {
-                avx_c[i] = _mm256_add_ps(avx_a[i], avx_b[i]);
-            }
+    auto firstDuration = end - start;
+
+    start = std::chrono::high_resolution_clock::now();
+    for (int j = 0; j < numberOfTests; ++j) {
+        for (int i = 0; i < size / 8; ++i) {
+            avx_c[i] = _mm256_add_ps(avx_a[i], avx_b[i]);
         }
     }
+    end = std::chrono::high_resolution_clock::now();
+    auto secondDuration = end - start;
+    firstDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(firstDuration);
+    secondDuration = std::chrono::duration_cast<std::chrono::nanoseconds>(secondDuration);
+
+    std::cout << "Two times: " << firstDuration.count() << ", Second: " << secondDuration.count() << std::endl;
 
     return 0;
 }
