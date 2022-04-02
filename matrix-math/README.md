@@ -40,6 +40,8 @@ I can compile two targets: one is vectorized, the other is not.  I added a compi
 ```bash
 cd build
 cmake .. -D VEC=true
+# to go to scalar code
+cmake .. -D VEC=false
 make
 ```
 There doesn't seem to be a nice way to change this with a call to `make`.

@@ -9,6 +9,7 @@
 #include <string>
 #include <unordered_map>
 #include "matrix_math.h"
+#include "loop.h"
 
 namespace bench {
 

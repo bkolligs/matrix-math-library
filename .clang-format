@@ -6,6 +6,7 @@ AlignTrailingComments: true
 AlignConsecutiveAssignments: true
 IndentAccessModifiers: true
 IncludeBlocks: Merge
+IndentPPDirectives: BeforeHash
 
 RawStringFormats:
 - Language: TextProto

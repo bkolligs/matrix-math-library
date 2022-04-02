@@ -1,7 +1,11 @@
 
 Overall Results
 ------------------------------------
+[Vectorized Loop]
+	Average duration: 159ns
+[Scalar Loop]
+	Average duration: 151ns
 [Custom Cross Product]
-	Average duration: 19.9907ns
+	Average duration: 123.48ns
 [Custom Dot Product]
-	Average duration: 22.3493ns
+	Average duration: 136.79ns
