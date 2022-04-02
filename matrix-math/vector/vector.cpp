@@ -1,6 +1,6 @@
 #include "vector.h"
 
-// #define VECTOR_SIMD
+#define VECTOR_SIMD
 #ifdef VECTOR_SIMD
 #pragma message("Using Vector SIMD Implementation")
 #include "vector_simd.h"
